@@ -12,7 +12,12 @@ const Approve = props => {
   const [txHash, setTxHash] = useState('')
   const opener = useRef()
   const balanceToEth = props.amount.balance
-  const approve = useApprove(props.token, balanceToEth, chainId)
+  const approve = useApprove(
+    props.token,
+    props.farmAddress,
+    balanceToEth,
+    chainId
+  )
   const network = getNetworkConfig(chainId)
 
   const transactionTime = new Date()

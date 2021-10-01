@@ -24,9 +24,9 @@ const DepositModal = props => {
   const {
     _web3ReactContext: { chainId },
   } = useWallet()
-
   useCheckApprovedToken(
     props.data.pair,
+    props.data.owner?.id,
     props.data.account,
     props.data.balance,
     chainId
@@ -196,6 +196,7 @@ const DepositModal = props => {
         {approved ? (
           <Deposit
             token={props.data.pair}
+            farmAddress={props.data.owner.id}
             tokenName={tokenName}
             amount={amount}
             days={days}
@@ -207,6 +208,7 @@ const DepositModal = props => {
         ) : (
           <Approved
             token={props.data.pair}
+            farmAddress={props.data.owner?.id}
             amount={{
               balance: props.data.balance,
             }}

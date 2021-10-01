@@ -15,7 +15,6 @@ export const useFetchDeposits = () => {
   } = useWallet()
   useEffect(() => {
     const network = getNetworkConfig(chainId)
-    const contract = getContract(network.honeyfarm, honeyFarm)
     const loadDepositData = async () => {
       const deposits = []
       if (account) {
@@ -25,12 +24,16 @@ export const useFetchDeposits = () => {
         })
         if (tulipF.length > 0) {
           for (const d of tulipF) {
-            const rewardBalance = await contract.functions.pendingHsf(d.id)
-            deposits.push({
-              ...d,
-              // symbol,
-              rewardBalance,
-            })
+            for (let i = 0; i < network.honeyfarm.length; i++) {
+              const contract = getContract(d.farmAddress, honeyFarm)
+              const rewardBalance = await contract.functions.pendingHsf(d.id)
+              console.log(d, contract, rewardBalance)
+              deposits.push({
+                ...d,
+                // symbol,
+                rewardBalance,
+              })
+            }
           }
           setDeposits(deposits)
         } else {
@@ -39,31 +42,33 @@ export const useFetchDeposits = () => {
       }
     }
     loadDepositData()
+    for (let i = 0; i < network.honeyfarm.length; i++) {
+      const farmContract = getContract(network.honeyfarm[i], honeyFarm)
 
-    if (account && contract) {
-      contract.on('Transfer', (from, to, value, event) => {
-        if (addressesEqual(to, account) || addressesEqual(from, account)) {
-          loadDepositData()
+      if (account && farmContract) {
+        farmContract.on('Transfer', (from, to, value, event) => {
+          if (addressesEqual(to, account) || addressesEqual(from, account)) {
+            loadDepositData()
+          }
+        })
+      }
+
+      const combContract = getContract(network.xCombToken, ERC20)
+      if (account && combContract) {
+        combContract.on('Transfer', (from, to, value, event) => {
+          if (addressesEqual(to, account)) {
+            loadDepositData()
+          }
+        })
+      }
+
+      return () => {
+        if (farmContract) {
+          farmContract.off('Transfer')
+          combContract.off('Transfer')
         }
-      })
-    }
-
-    const combContract = getContract(network.xCombToken, ERC20)
-    if (account && combContract) {
-      combContract.on('Transfer', (from, to, value, event) => {
-        if (addressesEqual(to, account)) {
-          loadDepositData()
-        }
-      })
-    }
-
-    return () => {
-      if (contract) {
-        contract.off('Transfer')
-        combContract.off('Transfer')
       }
     }
   }, [account, chainId])
-
   return deposits
 }

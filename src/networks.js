@@ -2,7 +2,10 @@ import { getNetworkType, isLocalOrUnknownNetwork } from './lib/web3-utils'
 
 export const networkConfigs = {
   xdai: {
-    honeyfarm: '0xB44825cF0d8D4dD552f2434056c41582415AaAa1',
+    honeyfarm: [
+      '0xB44825cF0d8D4dD552f2434056c41582415AaAa1',
+      '0xbC73a8bAB0eFD4052C3F5D774A4e384d35cB23dD',
+    ],
     ReferralRewarder: '0x82374C59709AAc2f7864191a3c492932379536F4',
     StreamedAirdropper: '0xdD36008685108aFafc11F88bBc66C39A851Df843',
     xCombToken: '0x38Fb649Ad3d6BA1113Be5F57B927053E97fC5bF7',
@@ -12,10 +15,18 @@ export const networkConfigs = {
       defaultEth: '',
       subgraph: '',
     },
-    token: {
-      name: 'xComb',
-      image: '/xComb.svg',
-    },
+    token: [
+      {
+        name: 'xComb',
+        address: '0x38Fb649Ad3d6BA1113Be5F57B927053E97fC5bF7',
+        image: '/xComb.svg',
+      },
+      {
+        name: 'AGVE',
+        address: '0x3a97704a1b25F08aa230ae53B352e2e72ef52843',
+        image: '/icon.svg',
+      },
+    ],
   },
   polygon: {
     honeyfarm: '0x62d7E2484FCFc6752B9473260efE1B86caBAc34e',

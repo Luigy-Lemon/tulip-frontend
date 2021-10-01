@@ -12,7 +12,7 @@ const Harvest = props => {
   const [visible, setVisible] = useState(false)
   const [txHash, setTxHash] = useState('')
   const opener = useRef()
-  const harvest = useHarvest(props.id, chainId)
+  const harvest = useHarvest(props.id, props.farmAddress, chainId)
   const network = getNetworkConfig(chainId)
 
   const transactionTime = new Date()

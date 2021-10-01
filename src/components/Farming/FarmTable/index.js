@@ -36,7 +36,6 @@ const FarmTable = props => {
   const [rewardApy, setRewardApy] = useState(0)
   const { pairData, searchValue, balance } = props
   const poolInfo = useFetchPoolInfo()
-
   const pairs = pairData || []
   const fuse = new Fuse(pairs, {
     keys: [
@@ -69,16 +68,15 @@ const FarmTable = props => {
   const handleModalActions = (e, img, rwdApy) => {
     const d = searchValue ? results : pairs
     const filtered = d.filter(data => {
-      return data.pair === e.target.id
+      const element = e.target.id.split(',')
+      return data.pair === element[0] && data.owner.id === element[1]
     })
-
     setImgObj(img)
     setRewardApy(rwdApy)
     // do nothing if balance is zero or data is not loaded
     if (filtered.length === 0 || isZeroBalance(e.target.id)) {
       return
     }
-
     setModalAction(true)
     setModalData({
       ...filtered[0],
@@ -187,7 +185,7 @@ const FarmTable = props => {
                   <Button
                     disabled={isZeroBalance(pool.pair)}
                     css={buttonCss(pool.pair)}
-                    id={pool.pair}
+                    id={`${pool.pair},${pool.owner?.id}`}
                     label="Stake"
                     onClick={e => {
                       handleModalActions(e, imgObj, pool.rewardApy, pool)
@@ -198,7 +196,7 @@ const FarmTable = props => {
                 <Button
                   disabled={isZeroBalance(pool.pair)}
                   css={buttonCss(pool.pair)}
-                  id={pool.pair}
+                  id={`${pool.pair},${pool.owner?.id}`}
                   label="Stake"
                   onClick={e => {
                     handleModalActions(e, imgObj, pool.rewardApy, pool)

@@ -50,6 +50,7 @@ const DepositTable = props => {
       id,
       amount,
       pool,
+      farmAddress,
       referrer,
       rewardDebt,
       unlockTime,
@@ -62,6 +63,7 @@ const DepositTable = props => {
         id,
         amount: amount,
         pool,
+        farmAddress,
         referrer,
         rewardBalance,
         rewardDebt: rewardDebt.toFixed(3),
@@ -189,6 +191,7 @@ const DepositTable = props => {
           id,
           amount,
           pool,
+          farmAddress,
           referrer,
           rewardDebt,
           unlockTime,
@@ -288,13 +291,18 @@ const DepositTable = props => {
                 ) : (
                   <Withdraw
                     id={id}
+                    farmAddress={farmAddress}
                     disabled={withdrawDisabled}
                     onError={handleError}
                     opener={opener}
                   />
                 )}
               </div>
-              <Harvest id={id} onError={handleError} />
+              <Harvest
+                id={id}
+                farmAddress={farmAddress}
+                onError={handleError}
+              />
             </>,
           ]
         }}
